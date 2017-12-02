@@ -1,0 +1,480 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<title>three.js webgl - animals [ro.me]</title>
+
+<style type="text/css">
+body {
+    font-family: Monospace;
+	text-align:center;
+    background-color: #ffffff;
+    margin: 0px;
+    overflow: hidden;
+}
+
+#info {
+	position: absolute;
+	top: 0px; width: 100%;
+	padding: 5px;
+	z-index:100;
+	color: #dddddd;
+	font-weight:bold;
+}
+
+a {	color: #ffaa00; }
+
+</style>
+
+<script type="text/javascript" src="ThreeAnimals.js" tppabs="http://alteredqualia.com/three/examples/js/ThreeAnimals.js"></script>
+<script type="text/javascript" src="AnimalLight.js" tppabs="http://alteredqualia.com/three/examples/js/AnimalLight.js"></script>
+<script type="text/javascript" src="Detector.js" tppabs="http://alteredqualia.com/three/examples/js/Detector.js"></script>
+<script type="text/javascript" src="RequestAnimationFrame.js" tppabs="http://alteredqualia.com/three/examples/js/RequestAnimationFrame.js"></script>
+
+</head>
+
+<body>
+
+<div id="info">
+	<a href="javascript:if(confirm(%27http://github.com/mrdoob/three.js  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://github.com/mrdoob/three.js%27" tppabs="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - animals - models by <a href="javascript:if(confirm(%27http://mirada.com/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://mirada.com/%27" tppabs="http://mirada.com/">Mirada</a> from <a href="javascript:if(confirm(%27http://ro.me/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://ro.me/%27" tppabs="http://ro.me/">ro.me</a> 
+	<br/><br/>click to freeze time
+</div>
+
+<script>
+
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+var container;
+var camera, scene, renderer;
+var morphObject;
+
+var postprocessing1 = {};
+var postprocessing2 = {};
+
+var SCREEN_HEIGHT = window.innerHeight - 200;
+var SCREEN_WIDTH = window.innerWidth;
+
+var mouseX = 0, mouseY = 0;
+
+var windowHalfX = window.innerWidth / 2;
+var windowHalfY = window.innerHeight / 2;
+
+var timeRunning = true;
+
+init();
+animate();
+
+
+function init() {
+
+    container = document.createElement( 'div' );
+    document.body.appendChild( container );
+
+    camera = new THREE.Camera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
+    camera.position.y = 20;
+    camera.position.z = 350;
+
+    scene = new THREE.Scene();
+	
+	scene.fog = new THREE.FogExp2( 0x403830, 0.0012 );
+
+    scene.addLight( new THREE.AmbientLight( 0x111111 ) );
+
+    var light = new THREE.DirectionalLight( 0xffffff, 0.05 );
+    light.position.set( 0, 1, 1 );
+    scene.addLight( light );
+
+	//renderer = new THREE.WebGLRenderer( { antialias: false, clearColor: 0x403830, clearAlpha: 1 } );
+	renderer = new THREE.WebGLRenderer( { antialias: false, clearColor: 0x403830, clearAlpha: 1 } );
+    renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+    
+    renderer.autoClear = false;
+    
+	renderer.domElement.style.position = "absolute";
+	renderer.domElement.style.top =  0.5 * ( window.innerHeight - SCREEN_HEIGHT ) +"px";
+	renderer.domElement.style.left = "0px";
+
+    container.appendChild( renderer.domElement );
+
+	initPostprocessingBloom( postprocessing1 );
+    initPostprocessingFocus( postprocessing2 );
+
+    var loader = new THREE.JSONLoader( true );
+    loader.load( { model: "flamingo.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/flamingo.js*/, callback: function( geo ) { addAnimal( geo,   0,  250,  160, 0, 0, 1 ) } } );
+    loader.load( { model: "flamingo.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/flamingo.js*/, callback: function( geo ) { addAnimal( geo,  100, 200,    0, 0, 0, 1 ) } } );
+    
+	loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo, -100, 240,    0,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,  200, 240,   60,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,    0, 230, -160,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,   70, 220, -260, 500, 500, 1 ) } } );
+    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo, -270, 220, -360, 500, 500, 1 ) } } );
+    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,  170, 220, -560, 500, 500, 1 ) } } );
+	
+    loader.load( { model: "stork.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/stork.js*/, callback: function( geo ) { addAnimal( geo,  130, 200,  150, 0, 0, 1 ) } } );
+    loader.load( { model: "stork.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/stork.js*/, callback: function( geo ) { addAnimal( geo,  330, 240,  200, 0, 0, 1 ) } } );
+	
+    loader.load( { model: "eagle.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/eagle.js*/, callback: function( geo ) { addAnimal( geo, -130, 240,  150, 0, 0, 1 ) } } );
+    
+	loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -330, 220,   50, 0, 0, 1 ) } } );
+    loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -190, 200,    0, 0, 0, 1 ) } } );
+    loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -290, 240, -100, 0, 0, 1 ) } } );
+
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,   50, 0,  150, 500, 500, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -200, 0, -500,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  220, 0, -480, 500, 500, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -230, 0,  -10,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,   50, 0, -200,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  220, 0, -140, 100, 100, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -150, 0, -290,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  150, 0, -290,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,    0, 0, -400,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  300, 0, -300,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  400, 0, -450,    0,  0, 1 ) } } );
+	loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -300, 0, -350,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -100, 0, -550,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  100, 0, -550,    0,  0, 1 ) } } );
+
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  -50, 0,   0,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -150, 0, 150, 100, 100, 1 ) } } );
+
+    loader.load( { model: "chow.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/chow.js*/,            callback: function( geo ) { addAnimal( geo, -30, 0, 150, 140, 100, 1 ) } } );
+    loader.load( { model: "goldenRetreiver.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/goldenRetreiver.js*/, callback: function( geo ) { addAnimal( geo, -90, 0, 180,   0,   0, 1 ) } } );
+
+    loader.load( { model: "fox.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/fox.js*/, callback: function( geo ) { addAnimal( geo, 140, 0, 110, 100, 100, 1.2 ) } } );
+    loader.load( { model: "fox.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/fox.js*/, callback: function( geo ) { addAnimal( geo, 100, 0,  60,   0,   0, 1.3 ) } } );
+
+    loader.load( { model: "elk.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/elk.js*/, callback: function( geo ) { addAnimal( geo,   300, 0,  80,    0,    0,   1.5 ) } } );
+    loader.load( { model: "elk.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/elk.js*/, callback: function( geo ) { addAnimal( geo,   450, 0, 120,    0,    0,   1.5 ) } } );
+	
+    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -300, 0,  80,    0,    0,   1.25 ) } } );
+    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -350, 0, -50,  500,   500,  1.25 ) } } );
+    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -450, 0,  50,  200,   200,  1.25 ) } } );
+    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -500, 0, 100,   50,    50,  1.25 ) } } );
+
+    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, 370, 0,   -150,    0,    0,  1 ) } } );
+    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, 570, 0,   -350, 1000, 1500,  1 ) } } );
+    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -400, 0, -250,   100,  100,  1.1 ) } } );
+    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -650, 0, -500,  1000, 1000,  1 ) } } );
+    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -550, 0, -700,  1000, 1000,  1 ) } } );
+
+    loader.load( { model: "mountainlion.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/mountainlion.js*/, callback: function( geo ) { addAnimal( geo, 200, 0, 120, 100, 100, 1.1 ) } } );
+
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	
+};
+
+function onDocumentMouseMove( event ) {
+
+	mouseX = event.clientX - windowHalfX;
+	mouseY = event.clientY - windowHalfY;
+
+};
+
+function onDocumentMouseDown( event ) {
+
+	timeRunning = !timeRunning;
+	
+};
+
+function addAnimal( geometry, x, y, z, sa, sb, scale ) {
+
+    morphObject = ROME.Animal( geometry, true );
+    
+    var mesh = morphObject.mesh;
+	mesh.materials[ 0 ].wireframe = false;
+	
+	//mesh.materials[ 0 ].uniforms.diffuse.value.setHSV( 0.5 + 0.15 * Math.random(), 0.95, 0.95 );
+	mesh.materials[ 0 ].uniforms.diffuse.value.setHSV( 0.05, 0.5, 0.85 );
+
+    //mesh.rotation.set( 0, -0.75, 0 );
+    mesh.position.set( 0 + x, -100 + y, 0 + z );
+	
+	if ( scale != undefined )
+		mesh.scale.set( scale, scale, scale );
+
+    mesh.matrixAutoUpdate = false;
+    mesh.updateMatrix();
+    mesh.update();
+    mesh.doubleSided = true;
+	
+    scene.addChild( mesh );
+
+    cameraDistance = 620;
+    cameraHeight = 195;
+
+    //cameraDistance = mesh.boundRadius * 2.5;
+
+    camera.position.set( 0, cameraHeight, cameraDistance );
+    camera.target.position.set( 0, 0, 0 );
+
+    var nameA = morphObject.availableAnimals[ 0 ],
+        nameB = morphObject.availableAnimals[ 0 ];
+
+    morphObject.play( nameA, nameB, sa, sb );
+    morphObject.animalA.timeScale = morphObject.animalB.timeScale = 0.2 + 0.3 * Math.random();
+
+};
+
+
+var delta, time, oldTime = new Date().getTime();
+
+function updateMorph( delta ) {
+
+    if ( morphObject ) {
+        
+        THREE.AnimationHandler.update( delta );
+        
+    }
+
+};
+
+function animate() {
+
+    requestAnimationFrame( animate );
+    
+    time = new Date().getTime();
+    delta = time - oldTime;
+    oldTime = time;
+
+	if ( timeRunning ) updateMorph( delta );
+    
+    render();
+
+};
+
+function initPostprocessingFocus( effect ) {
+    
+    effect.type = "focus";
+    
+    effect.scene = new THREE.Scene();
+    
+    effect.camera = new THREE.Camera();
+    effect.camera.projectionMatrix = THREE.Matrix4.makeOrtho( SCREEN_WIDTH / - 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_HEIGHT / - 2, -10000, 10000 );
+    effect.camera.position.z = 100;
+    
+    effect.texture = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter } );
+    effect.texture2 = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter } );
+    
+    var heatUniforms = {
+
+		"map": { type: "t", value:0, texture: effect.texture },
+		"screenWidth": { type: "f", value: SCREEN_WIDTH },
+		"screenHeight": { type: "f", value: SCREEN_HEIGHT },
+		"vingenettingOffset": { type: "f", value: 0.8 },
+		"vingenettingDarkening": { type: "f", value: 0.25 },
+		"sampleDistance": { type: "f", value: 1.0 },
+		"waveFactor": { type: "f", value: 0.0 }
+
+    };
+
+    effect.materialHeat = new THREE.MeshShaderMaterial( {
+
+        uniforms: heatUniforms,
+        vertexShader: [
+
+            "varying vec2 vUv;",
+
+            "void main() {",
+
+                "vUv = vec2( uv.x, 1.0 - uv.y );",
+                "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+            "}"
+
+        ].join("\n"),
+        
+        fragmentShader: [
+
+				"uniform float screenWidth;",
+				"uniform float screenHeight;",
+				"uniform float vingenettingOffset;",
+				"uniform float vingenettingDarkening;",
+				"uniform float sampleDistance;",
+				"uniform float waveFactor;",
+				
+				"uniform sampler2D map;",
+				"varying vec2 vUv;",
+	
+				"void main() {",
+	
+					"vec4 color, org, tmp, add;",
+					"float sample_dist, f;",
+					"vec2 vin;",				
+					"vec2 uv = vUv;",
+					
+					"add += color = org = texture2D( map, uv );",
+
+					"vin = (uv - vec2(0.5)) * vec2( 1.4 /*vingenettingOffset * 2.0*/);",
+					"sample_dist =(dot( vin, vin ) * 2.0);",
+					
+					"f = (waveFactor * 100.0 + sample_dist) * sampleDistance * 4.0;",
+	
+					"vec2 sampleSize = vec2(  1.0 / screenWidth, 1.0 / screenHeight ) * vec2(f);",
+	
+					"add += tmp = texture2D( map, uv + vec2(0.111964, 0.993712) * sampleSize);", 
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(0.846724, 0.532032) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(0.943883, -0.330279) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(0.330279, -0.943883) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(-0.532032, -0.846724) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(-0.993712, -0.111964) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"add += tmp = texture2D( map, uv + vec2(-0.707107, 0.707107) * sampleSize);",
+					"if( tmp.b < color.b ) color = tmp;",
+	
+					"uv = (uv - vec2(0.5)) * vec2( vingenettingOffset );",
+					"color = color * vec4(2.0) - (add / vec4(8.0));",
+					"color = color + (add / vec4(8.0) - color) * (vec4(1.0) - vec4(sample_dist * 0.5));",
+					
+					"gl_FragColor = vec4( mix(color.rgb * color.rgb * vec3( 0.95 ) + color.rgb, vec3( 0.0 ) - vec3( vingenettingDarkening ), vec3( dot( uv, uv ))), 1.0 );",
+				"}"
+
+
+            ].join("\n")
+
+    } );
+    
+    effect.quad = new THREE.Mesh( new THREE.Plane( SCREEN_WIDTH, SCREEN_HEIGHT ), effect.materialHeat );
+    effect.quad.position.z = -500;
+    effect.scene.addObject( effect.quad );
+
+}
+
+function initPostprocessingBloom( effect ) {
+
+	effect.type = "bloomnoise";
+	
+	effect.scene = new THREE.Scene();
+
+	effect.camera = new THREE.Camera();
+	effect.camera.projectionMatrix = THREE.Matrix4.makeOrtho( SCREEN_WIDTH / - 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_HEIGHT / - 2, -10000, 10000 );
+	effect.camera.position.z = 100;
+
+	var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter };
+	effect.rtTexture1 = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, pars );
+	effect.rtTexture2 = new THREE.WebGLRenderTarget( 512, 512, pars );
+	effect.rtTexture3 = new THREE.WebGLRenderTarget( 512, 512, pars );
+
+	var screen_shader = THREE.ShaderUtils.lib["screen"];
+	var screen_uniforms = THREE.UniformsUtils.clone( screen_shader.uniforms );
+
+	screen_uniforms["tDiffuse"].texture = effect.rtTexture1;
+	screen_uniforms["opacity"].value = 1.0;
+
+	effect.materialScreen = new THREE.MeshShaderMaterial( {
+
+		uniforms: screen_uniforms,
+		vertexShader: screen_shader.vertexShader,
+		fragmentShader: screen_shader.fragmentShader,
+		blending: THREE.AdditiveBlending,
+		transparent: true
+
+	} );
+
+	var convolution_shader = THREE.ShaderUtils.lib["convolution"];
+	var convolution_uniforms = THREE.UniformsUtils.clone( convolution_shader.uniforms );
+
+	effect.blurx = new THREE.Vector2( 0.001953125, 0.0 ),
+	effect.blury = new THREE.Vector2( 0.0, 0.001953125 );
+
+	convolution_uniforms["tDiffuse"].texture = effect.rtTexture1;
+	convolution_uniforms["uImageIncrement"].value = effect.blurx;
+	convolution_uniforms["cKernel"].value = THREE.ShaderUtils.buildKernel( 4.0 );
+
+	effect.materialConvolution = new THREE.MeshShaderMaterial( {
+
+		uniforms: convolution_uniforms,
+		vertexShader:   "#define KERNEL_SIZE 25.0\n" + convolution_shader.vertexShader,
+		fragmentShader: "#define KERNEL_SIZE 25\n"   + convolution_shader.fragmentShader
+
+	} );
+
+	var film_shader = THREE.ShaderUtils.lib["film"];
+	var film_uniforms = THREE.UniformsUtils.clone( film_shader.uniforms );
+	
+	film_uniforms["tDiffuse"].texture = effect.rtTexture1;
+	
+	effect.materialFilm = new THREE.MeshShaderMaterial( { uniforms: film_uniforms, vertexShader: film_shader.vertexShader, fragmentShader: film_shader.fragmentShader } );
+	effect.materialFilm.uniforms.grayscale.value = 0;
+	effect.materialFilm.uniforms.nIntensity.value = 0.2;
+	effect.materialFilm.uniforms.sIntensity.value = 0.05;
+	effect.materialFilm.uniforms.sCount.value = 3448;
+
+	effect.quad = new THREE.Mesh( new THREE.Plane( SCREEN_WIDTH, SCREEN_HEIGHT ), effect.materialConvolution );
+	effect.quad.position.z = -500;
+	effect.scene.addObject( effect.quad );
+
+}
+
+function render() {
+
+	camera.position.x += ( mouseX - camera.position.x ) * 0.003;
+	//camera.position.y += ( - (mouseY) - camera.position.y ) * 0.0036;
+	
+    renderer.clear();
+
+	// BLOOM
+
+	// Render scene into texture
+
+	renderer.render( scene, camera, postprocessing1.rtTexture1, true );
+
+	// Render quad with blured scene into texture (convolution pass 1)
+
+	postprocessing1.quad.materials[ 0 ] = postprocessing1.materialConvolution;
+
+	postprocessing1.materialConvolution.uniforms.tDiffuse.texture = postprocessing1.rtTexture1;
+	postprocessing1.materialConvolution.uniforms.uImageIncrement.value = postprocessing1.blurx;
+
+	renderer.render( postprocessing1.scene, postprocessing1.camera, postprocessing1.rtTexture2, true );
+
+	// Render quad with blured scene into texture (convolution pass 2)
+
+	postprocessing1.materialConvolution.uniforms.tDiffuse.texture = postprocessing1.rtTexture2;
+	postprocessing1.materialConvolution.uniforms.uImageIncrement.value = postprocessing1.blury;
+
+	renderer.render( postprocessing1.scene, postprocessing1.camera, postprocessing1.rtTexture3, true );
+
+	// Render original scene with superimposed blur to texture
+
+	postprocessing1.quad.materials[ 0 ] = postprocessing1.materialScreen;
+
+	postprocessing1.materialScreen.blending = THREE.AdditiveBlending;
+	postprocessing1.materialScreen.uniforms.tDiffuse.texture = postprocessing1.rtTexture3;
+	postprocessing1.materialScreen.uniforms.opacity.value = 0.82;
+
+	renderer.render( postprocessing1.scene, postprocessing1.camera, postprocessing1.rtTexture1, false );
+
+
+	// NOISE + SCANLINES
+	
+	postprocessing1.materialFilm.uniforms.time.value += 0.01;
+	postprocessing1.quad.materials[ 0 ] = postprocessing1.materialFilm;	
+
+	renderer.render( postprocessing1.scene, postprocessing1.camera, postprocessing2.texture, true );
+
+    // FOCUS
+    
+    postprocessing2.quad.materials[ 0 ] = postprocessing2.materialHeat;
+    postprocessing2.materialHeat.uniforms.map.texture = postprocessing2.texture;
+
+    renderer.render( postprocessing2.scene, postprocessing2.camera );
+
+
+}
+
+</script>
+</body>
+
+</html>
