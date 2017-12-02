@@ -24,10 +24,10 @@ a {	color: #ffaa00; }
 
 </style>
 
-<script type="text/javascript" src="ThreeAnimals.js" tppabs="http://alteredqualia.com/three/examples/js/ThreeAnimals.js"></script>
-<script type="text/javascript" src="AnimalLight.js" tppabs="http://alteredqualia.com/three/examples/js/AnimalLight.js"></script>
-<script type="text/javascript" src="Detector.js" tppabs="http://alteredqualia.com/three/examples/js/Detector.js"></script>
-<script type="text/javascript" src="RequestAnimationFrame.js" tppabs="http://alteredqualia.com/three/examples/js/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="ThreeAnimals.js"></script>
+<script type="text/javascript" src="AnimalLight.js"></script>
+<script type="text/javascript" src="Detector.js"></script>
+<script type="text/javascript" src="RequestAnimationFrame.js"></script>
 
 <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
 .en-markup-crop-options {
@@ -108,64 +108,64 @@ function init() {
     initPostprocessingFocus( postprocessing2 );
 
     var loader = new THREE.JSONLoader( true );
-    loader.load( { model: "flamingo.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/flamingo.js*/, callback: function( geo ) { addAnimal( geo,   0,  250,  160, 0, 0, 1 ) } } );
-    loader.load( { model: "flamingo.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/flamingo.js*/, callback: function( geo ) { addAnimal( geo,  100, 200,    0, 0, 0, 1 ) } } );
+    loader.load( { model: "flamingo.js", callback: function( geo ) { addAnimal( geo,   0,  250,  160, 0, 0, 1 ) } } );
+    loader.load( { model: "flamingo.js", callback: function( geo ) { addAnimal( geo,  100, 200,    0, 0, 0, 1 ) } } );
     
-	loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo, -100, 240,    0,   0, 0, 1 ) } } );
-    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,  200, 240,   60,   0, 0, 1 ) } } );
-    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,    0, 230, -160,   0, 0, 1 ) } } );
-    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,   70, 220, -260, 500, 500, 1 ) } } );
-    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo, -270, 220, -360, 500, 500, 1 ) } } );
-    loader.load( { model: "parrot.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/parrot.js*/,   callback: function( geo ) { addAnimal( geo,  170, 220, -560, 500, 500, 1 ) } } );
+	loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo, -100, 240,    0,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo,  200, 240,   60,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo,    0, 230, -160,   0, 0, 1 ) } } );
+    loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo,   70, 220, -260, 500, 500, 1 ) } } );
+    loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo, -270, 220, -360, 500, 500, 1 ) } } );
+    loader.load( { model: "parrot.js",   callback: function( geo ) { addAnimal( geo,  170, 220, -560, 500, 500, 1 ) } } );
 	
-    loader.load( { model: "stork.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/stork.js*/, callback: function( geo ) { addAnimal( geo,  130, 200,  150, 0, 0, 1 ) } } );
-    loader.load( { model: "stork.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/stork.js*/, callback: function( geo ) { addAnimal( geo,  330, 240,  200, 0, 0, 1 ) } } );
+    loader.load( { model: "stork.js", callback: function( geo ) { addAnimal( geo,  130, 200,  150, 0, 0, 1 ) } } );
+    loader.load( { model: "stork.js", callback: function( geo ) { addAnimal( geo,  330, 240,  200, 0, 0, 1 ) } } );
 	
-    loader.load( { model: "eagle.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/eagle.js*/, callback: function( geo ) { addAnimal( geo, -130, 240,  150, 0, 0, 1 ) } } );
+    loader.load( { model: "eagle.js", callback: function( geo ) { addAnimal( geo, -130, 240,  150, 0, 0, 1 ) } } );
     
-	loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -330, 220,   50, 0, 0, 1 ) } } );
-    loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -190, 200,    0, 0, 0, 1 ) } } );
-    loader.load( { model: "owl.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/owl.js*/,   callback: function( geo ) { addAnimal( geo, -290, 240, -100, 0, 0, 1 ) } } );
+	loader.load( { model: "owl.js",   callback: function( geo ) { addAnimal( geo, -330, 220,   50, 0, 0, 1 ) } } );
+    loader.load( { model: "owl.js",   callback: function( geo ) { addAnimal( geo, -190, 200,    0, 0, 0, 1 ) } } );
+    loader.load( { model: "owl.js",   callback: function( geo ) { addAnimal( geo, -290, 240, -100, 0, 0, 1 ) } } );
 
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,   50, 0,  150, 500, 500, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -200, 0, -500,   0,   0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  220, 0, -480, 500, 500, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -230, 0,  -10,   0,   0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,   50, 0, -200,   0,   0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  220, 0, -140, 100, 100, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -150, 0, -290,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  150, 0, -290,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,    0, 0, -400,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  300, 0, -300,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  400, 0, -450,    0,  0, 1 ) } } );
-	loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -300, 0, -350,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -100, 0, -550,    0,  0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  100, 0, -550,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,   50, 0,  150, 500, 500, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -200, 0, -500,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  220, 0, -480, 500, 500, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -230, 0,  -10,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,   50, 0, -200,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  220, 0, -140, 100, 100, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -150, 0, -290,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  150, 0, -290,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,    0, 0, -400,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  300, 0, -300,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  400, 0, -450,    0,  0, 1 ) } } );
+	loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -300, 0, -350,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -100, 0, -550,    0,  0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  100, 0, -550,    0,  0, 1 ) } } );
 
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo,  -50, 0,   0,   0,   0, 1 ) } } );
-    loader.load( { model: "horse.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/horse.js*/, callback: function( geo ) { addAnimal( geo, -150, 0, 150, 100, 100, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo,  -50, 0,   0,   0,   0, 1 ) } } );
+    loader.load( { model: "horse.js", callback: function( geo ) { addAnimal( geo, -150, 0, 150, 100, 100, 1 ) } } );
 
-    loader.load( { model: "chow.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/chow.js*/,            callback: function( geo ) { addAnimal( geo, -30, 0, 150, 140, 100, 1 ) } } );
-    loader.load( { model: "goldenRetreiver.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/goldenRetreiver.js*/, callback: function( geo ) { addAnimal( geo, -90, 0, 180,   0,   0, 1 ) } } );
+    loader.load( { model: "chow.js",            callback: function( geo ) { addAnimal( geo, -30, 0, 150, 140, 100, 1 ) } } );
+    loader.load( { model: "goldenRetreiver.js", callback: function( geo ) { addAnimal( geo, -90, 0, 180,   0,   0, 1 ) } } );
 
-    loader.load( { model: "fox.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/fox.js*/, callback: function( geo ) { addAnimal( geo, 140, 0, 110, 100, 100, 1.2 ) } } );
-    loader.load( { model: "fox.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/fox.js*/, callback: function( geo ) { addAnimal( geo, 100, 0,  60,   0,   0, 1.3 ) } } );
+    loader.load( { model: "fox.js", callback: function( geo ) { addAnimal( geo, 140, 0, 110, 100, 100, 1.2 ) } } );
+    loader.load( { model: "fox.js", callback: function( geo ) { addAnimal( geo, 100, 0,  60,   0,   0, 1.3 ) } } );
 
-    loader.load( { model: "elk.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/elk.js*/, callback: function( geo ) { addAnimal( geo,   300, 0,  80,    0,    0,   1.5 ) } } );
-    loader.load( { model: "elk.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/elk.js*/, callback: function( geo ) { addAnimal( geo,   450, 0, 120,    0,    0,   1.5 ) } } );
+    loader.load( { model: "elk.js", callback: function( geo ) { addAnimal( geo,   300, 0,  80,    0,    0,   1.5 ) } } );
+    loader.load( { model: "elk.js", callback: function( geo ) { addAnimal( geo,   450, 0, 120,    0,    0,   1.5 ) } } );
 	
-    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -300, 0,  80,    0,    0,   1.25 ) } } );
-    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -350, 0, -50,  500,   500,  1.25 ) } } );
-    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -450, 0,  50,  200,   200,  1.25 ) } } );
-    loader.load( { model: "deer.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/deer.js*/, callback: function( geo ) { addAnimal( geo, -500, 0, 100,   50,    50,  1.25 ) } } );
+    loader.load( { model: "deer.js", callback: function( geo ) { addAnimal( geo, -300, 0,  80,    0,    0,   1.25 ) } } );
+    loader.load( { model: "deer.js", callback: function( geo ) { addAnimal( geo, -350, 0, -50,  500,   500,  1.25 ) } } );
+    loader.load( { model: "deer.js", callback: function( geo ) { addAnimal( geo, -450, 0,  50,  200,   200,  1.25 ) } } );
+    loader.load( { model: "deer.js", callback: function( geo ) { addAnimal( geo, -500, 0, 100,   50,    50,  1.25 ) } } );
 
-    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, 370, 0,   -150,    0,    0,  1 ) } } );
-    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, 570, 0,   -350, 1000, 1500,  1 ) } } );
-    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -400, 0, -250,   100,  100,  1.1 ) } } );
-    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -650, 0, -500,  1000, 1000,  1 ) } } );
-    loader.load( { model: "bearBrown.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/bearBrown.js*/, callback: function( geo ) { addAnimal( geo, -550, 0, -700,  1000, 1000,  1 ) } } );
+    loader.load( { model: "bearBrown.js", callback: function( geo ) { addAnimal( geo, 370, 0,   -150,    0,    0,  1 ) } } );
+    loader.load( { model: "bearBrown.js", callback: function( geo ) { addAnimal( geo, 570, 0,   -350, 1000, 1500,  1 ) } } );
+    loader.load( { model: "bearBrown.js", callback: function( geo ) { addAnimal( geo, -400, 0, -250,   100,  100,  1.1 ) } } );
+    loader.load( { model: "bearBrown.js", callback: function( geo ) { addAnimal( geo, -650, 0, -500,  1000, 1000,  1 ) } } );
+    loader.load( { model: "bearBrown.js", callback: function( geo ) { addAnimal( geo, -550, 0, -700,  1000, 1000,  1 ) } } );
 
-    loader.load( { model: "mountainlion.js"/*tpa=http://alteredqualia.com/three/examples/obj/morphs/mountainlion.js*/, callback: function( geo ) { addAnimal( geo, 200, 0, 120, 100, 100, 1.1 ) } } );
+    loader.load( { model: "mountainlion.js", callback: function( geo ) { addAnimal( geo, 200, 0, 120, 100, 100, 1.1 ) } } );
 
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
